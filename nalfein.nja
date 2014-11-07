@@ -1,0 +1,7 @@
+{
+  "venv": "", 
+  "project-type": "Import from sources", 
+  "name": "Nalfein", 
+  "license": "Mozilla Public License 2.0", 
+  "description": "Nalfein is a 2D game engine written in pygame"
+}
