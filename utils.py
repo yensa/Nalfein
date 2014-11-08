@@ -5,8 +5,18 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
+import pygame
+
 from collections import namedtuple
 
 
 Point = namedtuple('Point', ['x', 'y'])
 Size = namedtuple('Size', ['width', 'height'])
+
+
+class Color(pygame.Color):
+    def __init__(self, rgbavalue):
+        if isinstance(rgbavalue, str):
+            super(Color, self).__init__(rgbavalue)
+        else:
+            super(Color, self).__init__(*rgbavalue)
