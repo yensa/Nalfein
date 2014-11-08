@@ -8,25 +8,25 @@
 import pygame
 
 from theme import DefaultTheme
-from utils import Size
+from utils import Size, Color
 
 
 class Font(object):
     def __init__(self, name, theme=DefaultTheme()):
-        def attr(attrname):
-            return theme[name + '-' + attrname]
+        def attr(attrname, default=None):
+            return theme.get(name + '-' + attrname, default)
 
         try:
             self._font = pygame.font.Font(attr('name'), attr('size'))
         except IOError:
             self._font = pygame.font.SysFont(attr('name'), attr('size'))
 
-        self.color = attr('color')
-        self.antialias = attr('antialias')
+        self.color = Color(attr('color', 'white'))
+        self.antialias = attr('antialias', True)
 
-        self._font.set_bold(attr('bold'))
-        self._font.set_italic(attr('italic'))
-        self._font.set_underline(attr('underline'))
+        self._font.set_bold(attr('bold', False))
+        self._font.set_italic(attr('italic', False))
+        self._font.set_underline(attr('underline', False))
 
     @property
     def bold(self):
