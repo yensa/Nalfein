@@ -4,6 +4,10 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+# This source code has been copy/pasted from this location :
+# http://www.pygame.org/wiki/SignalSlot?parent=CookBook
+# Thanks to pygame.org and to the author of this piece of code
+
 
 from weakref import *
 import inspect
