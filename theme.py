@@ -24,7 +24,23 @@ class Theme(object):
         return Theme(**json.load(f))
 
     def __getitem__(self, name):
-        return self.__dict__[name]
+        levels = name.split('.')
+        try:
+            if len(levels) == 1:
+                return self.__dict__[name]
+            else:
+                current = self.__dict__
+                for level in levels[:-1]:
+                    current = current[level]
+                return current[levels[-1]]
+        except:
+            raise KeyError(name)
+
+    def get(self, name, default=None):
+        try:
+            return self[name]
+        except:
+            return default
 
 
 class DefaultTheme(Theme):
@@ -35,11 +51,17 @@ class DefaultTheme(Theme):
             'defaultheight': 100,
             'titlefont-name': 'Arial',
             'titlefont-size': 64,
-            'titlefont-color': (255, 255, 255),
+            'titlefont-color': 'white',
             'titlefont-antialias': True,
             'titlefont-bold': True,
             'titlefont-underline': False,
-            'titlefont-italic': False
+            'titlefont-italic': False,
+            'button': {
+                'font-name': 'Arial',
+                'font-size': 50,
+                'bgcolor': (80, 80, 80),
+                'clicked_bgcolor': (90, 90, 90),
+                }
             }
 
         super(DefaultTheme, self).__init__(**theme)
