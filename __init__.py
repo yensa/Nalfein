@@ -17,7 +17,7 @@ __date__ = '2014/11/08'
 from .scene import *
 from .game import *
 from .loader import *
-from .widget import *
+from .widgets import *
 from .draw import *
 from .utils import *
 from .theme import *
