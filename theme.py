@@ -46,7 +46,7 @@ class Theme(object):
 class DefaultTheme(Theme):
     def __init__(self):
         theme = {
-            'bgcolor': (80, 80, 80),
+            'bgcolor': (80, 80, 80, 255),
             'defaultwidth': 100,
             'defaultheight': 100,
             'titlefont-name': 'Arial',
@@ -59,8 +59,13 @@ class DefaultTheme(Theme):
             'button': {
                 'font-name': 'Arial',
                 'font-size': 50,
-                'bgcolor': (80, 80, 80),
-                'clicked_bgcolor': (90, 90, 90),
+                'bgcolor': (80, 80, 80, 255),
+                'clicked_bgcolor': (90, 90, 90, 255),
+                },
+            'label': {
+                'font-name': 'Arial',
+                'font-size': 50,
+                'bgcolor': (0, 0, 0, 0)
                 }
             }
 
