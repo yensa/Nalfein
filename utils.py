@@ -14,9 +14,19 @@ Point = namedtuple('Point', ['x', 'y'])
 Size = namedtuple('Size', ['width', 'height'])
 
 
-class Color(pygame.Color):
+class Color(object):
     def __init__(self, rgbavalue):
         if isinstance(rgbavalue, str):
-            super(Color, self).__init__(rgbavalue)
+            self._pygameColor = pygame.Color(rgbavalue)
         else:
-            super(Color, self).__init__(*rgbavalue)
+            self._pygameColor = pygame.Color(*rgbavalue)
+
+    @property
+    def rgba(self):
+        return self._pygameColor
+
+    def __repr__(self):
+        return repr(self._pygameColor)
+
+    def __str__(self):
+        return repr(self)
