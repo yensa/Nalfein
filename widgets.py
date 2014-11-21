@@ -27,18 +27,42 @@ class Widget(object):
         return pygame.Rect(self.left, self.top, self.width, self.height)
 
     def render(self, surf):
-        pygame.draw.rect(surf, self.bgcolor, self.rect)
+        pygame.draw.rect(surf, self.bgcolor.rgba, self.rect)
+
+
+class Label(Widget):
+    def __init__(self, text, pos=Point(0, 0), theme=DefaultTheme()):
+        super(Label, self).__init__(pos, theme)
+
+        self.bgcolor = Color(theme.get('label.bgcolor', 'black'))
+
+        self.font = Font('label.font', theme)
+
+        self._text = text
+
+        self.width, self.height = self.font.size(self._text)
+
+    @property
+    def text(self):
+        return self._text
+
+    @text.setter
+    def text(self, t):
+        self._text = t
+        self.size = self.font.size(self._text)
+        self.rect.width, self.rect.height = self.size.width, self.size.height
 
 
 class Button(Widget):
-    click = Signal()
-    unclick = Signal()
-
     def __init__(self, text, action, pos=Point(0, 0), theme=DefaultTheme()):
         super(Button, self).__init__(pos, theme)
 
-        self.bgcolor = Color(theme.button.bgcolor)
-        self.clicked_bgcolor = Color(theme.button.clicked_bgcolor)
+        self.click = Signal()
+        self.unclick = Signal()
+
+        self.bgcolor = Color(theme.get('button.bgcolor', 'black'))
+        self.clicked_bgcolor = Color(
+            theme.get('button.clicked_bgcolor', 'white'))
 
         self.font = Font('button.font', theme)
 
@@ -52,18 +76,18 @@ class Button(Widget):
         self.click.connect(action)
 
     def _clicked(self, button):
-        if button == constants.LEFTMOUSEBUTTON:
+        if button == LEFTMOUSEBUTTON:
             self.pressed = True
 
     def _unclicked(self, button):
-        if button == constants.LEFTMOUSEBUTTON:
+        if button == LEFTMOUSEBUTTON:
             self.pressed = False
 
     def render(self, surf):
         if self.pressed:
-            pygame.draw.rect(surf, self.clicked_bgcolor, self.rect)
+            pygame.draw.rect(surf, self.clicked_bgcolor.rgba, self.rect)
         else:
-            pygame.draw.rect(surf, self.bgcolor, self.rect)
+            pygame.draw.rect(surf, self.bgcolor.rgba, self.rect)
         textsize = self.font.size(self.text)
         pos = Point(self.left + (self.rect.width - textsize.width),
             self.top + (self.rect.height - textsize.height))
