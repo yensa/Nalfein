@@ -36,6 +36,8 @@ class Game(object):
 
             self.updateScene()
 
+            pygame.display.flip()
+
         pygame.quit()
         exit()
 
