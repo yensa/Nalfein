@@ -23,7 +23,9 @@ class Scene(object):
     def draw(self, surf):
         """Draws the scene on the screen and returns a list of rects
         representing the portions of the screen that have been updated"""
-        return []
+        for element in self.elements:
+            element.render(surf)
+        return self.elements
 
     def dispatch(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -51,20 +53,22 @@ class Scene(object):
 
     def onKeyDown(self, key, mod):
         for element in self.elements:
-            element.keydown(key, mod)
+            if hasattr(element, 'keydown'):
+                element.keydown(key, mod)
 
     def onKeyUp(self, key, mod):
         for element in self.elements:
-            element.keyup(key, mod)
+            if hasattr(element, 'keyup'):
+                element.keyup(key, mod)
 
     def onClick(self, button, pos):
         for element in self.elements:
-            if element.rect.collidepoint(pos):
+            if element.rect.collidepoint(pos) and hasattr(element, 'click'):
                 element.click(button)
 
     def onUnclick(self, button, pos):
         for element in self.elements:
-            if element.rect.collidepoint(pos):
+            if element.rect.collidepoint(pos) and hasattr(element, 'unclick'):
                 element.unclick(button)
 
     def onMouseMotion(self, pos, rel, buttons):
@@ -87,4 +91,5 @@ class Scene(object):
 
     def onUserEvent(self, code):
         for element in self.elements:
-            element.userevent(code)
+            if hasattr(element, 'userevent'):
+                element.userevent(code)
