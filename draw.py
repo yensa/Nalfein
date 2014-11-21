@@ -56,5 +56,5 @@ class Font(object):
         return Size(*self._font.size(text))
 
     def render(self, text, surf, pos):
-        todraw = self._font.render(text, self.antialias, self.color)
+        todraw = self._font.render(text, self.antialias, self.color.rgba)
         surf.blit(todraw, pos)
