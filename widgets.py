@@ -52,6 +52,9 @@ class Label(Widget):
         self.size = self.font.size(self._text)
         self.rect.width, self.rect.height = self.size.width, self.size.height
 
+    def render(self, surf):
+        self.font.render(self._text, surf, (self.left, self.top))
+
 
 class Button(Widget):
     def __init__(self, text, action, pos=Point(0, 0), theme=DefaultTheme()):
@@ -75,11 +78,11 @@ class Button(Widget):
 
         self.click.connect(action)
 
-    def _clicked(self, button):
+    def _clicked(self, button, pos):
         if button == LEFTMOUSEBUTTON:
             self.pressed = True
 
-    def _unclicked(self, button):
+    def _unclicked(self, button, pos):
         if button == LEFTMOUSEBUTTON:
             self.pressed = False
 
