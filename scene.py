@@ -7,6 +7,8 @@
 
 import pygame
 
+from utils import Point
+
 
 class Scene(object):
     """The Scene object represents a scene of the game."""
@@ -64,12 +66,12 @@ class Scene(object):
     def onClick(self, button, pos):
         for element in self.elements:
             if element.rect.collidepoint(pos) and hasattr(element, 'click'):
-                element.click(button)
+                element.click(button, Point(*pos))
 
     def onUnclick(self, button, pos):
         for element in self.elements:
-            if element.rect.collidepoint(pos) and hasattr(element, 'unclick'):
-                element.unclick(button)
+            if hasattr(element, 'unclick'):
+                element.unclick(button, Point(*pos))
 
     def onMouseMotion(self, pos, rel, buttons):
         pass
