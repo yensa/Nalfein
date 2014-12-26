@@ -7,54 +7,56 @@
 
 import pygame
 
-from theme import DefaultTheme
+# from theme import DefaultTheme
 from utils import Size, Color
 
 
 class Font(object):
-    def __init__(self, name, theme=DefaultTheme()):
-        def attr(attrname, default=None):
-            return theme.get(name + '-' + attrname, default)
+    def __init__(self, name, size=22, color=(0, 0, 0, 255)):
+        self.name = name
+        self.size = size
+        self.color = color
 
         try:
-            self._font = pygame.font.Font(attr('name'), attr('size'))
-        except IOError:
-            self._font = pygame.font.SysFont(attr('name'), attr('size'))
+            self.font = pygame.font.SysFont(self.name, self.size)
+        except:
+            try:
+                self.font = pygame.font.Font(self.name, self.size)
+            except:
+                self.font = pygame.font.SysFont('Arial', self.size)
 
-        self.color = Color(attr('color', 'white'))
-        self.antialias = attr('antialias', True)
+    def render(self, text):
+        return self.font.render(text, True, self.color)
 
-        self._font.set_bold(attr('bold', False))
-        self._font.set_italic(attr('italic', False))
-        self._font.set_underline(attr('underline', False))
+    def get_height(self):
+        return self.font.get_height()
+
+    def get_width(self, text):
+        return self.font.size(text)[0]
 
     @property
     def bold(self):
-        return self._font.get_bold()
+        return self.font.get_bold()
 
     @bold.setter
-    def bold(self, state):
-        self._font.set_bold(state)
+    def bold(self, value):
+        assert value in [True, False]
+        self.font.set_bold(value)
 
     @property
     def italic(self):
-        return self._font.get_italic()
+        return self.font.get_italic()
 
     @italic.setter
-    def italic(self, state):
-        self._font.set_italic(state)
+    def italic(self, value):
+        assert value in [True, False]
+        self.font.set_italic(value)
 
     @property
     def underline(self):
-        return self._font.get_underline()
+        return self.font.get_underline()
 
     @underline.setter
-    def underline(self, state):
-        self._font.set_underline(state)
-
-    def size(self, text):
-        return Size(*self._font.size(text))
-
-    def render(self, text, surf, pos):
-        todraw = self._font.render(text, self.antialias, self.color.rgba)
-        surf.blit(todraw, pos)
+    def underline(self, value):
+        assert value in [True, False]
+        self.font.set_underline(value)
