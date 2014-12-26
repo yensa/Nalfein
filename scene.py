@@ -7,7 +7,7 @@
 
 import pygame
 
-from utils import Point
+from utils import Point, RenderQueue
 
 
 class Scene(object):
@@ -20,14 +20,12 @@ class Scene(object):
 
     state = init
 
-    elements = []
+    elements = RenderQueue()
 
     def draw(self, surf):
-        """Draws the scene on the screen and returns a list of rects
-        representing the portions of the screen that have been updated"""
+        """Draws the scene on the screen"""
         for element in self.elements:
-            element.render(surf)
-        return self.elements
+            element.draw(surf)
 
     def dispatch(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -37,7 +35,7 @@ class Scene(object):
         elif event.type == pygame.MOUSEMOTION:
             self.onMouseMotion(event.pos, event.rel, event.buttons)
         elif event.type == pygame.KEYDOWN:
-            self.onKeyDown(event.key, event.mod)
+            self.onKeyDown(event.key, event.mod, event.unicode)
         elif event.type == pygame.KEYUP:
             self.onKeyUp(event.key, event.mod)
         elif event.type == pygame.JOYBUTTONDOWN:
@@ -53,20 +51,24 @@ class Scene(object):
         elif event.type == pygame.USEREVENT:
             self.onUserEvent(event.code)
 
-    def onKeyDown(self, key, mod):
+    def onKeyDown(self, key, mod, u):
         for element in self.elements:
-            if hasattr(element, 'keydown'):
-                element.keydown(key, mod)
+            if hasattr(element, 'keydown') and element.focus:
+                element.keydown(key, mod, u)
 
     def onKeyUp(self, key, mod):
         for element in self.elements:
-            if hasattr(element, 'keyup'):
+            if hasattr(element, 'keyup') and element.focus:
                 element.keyup(key, mod)
 
     def onClick(self, button, pos):
         for element in self.elements:
-            if element.rect.collidepoint(pos) and hasattr(element, 'click'):
-                element.click(button, Point(*pos))
+            element.focus = False
+            if element.rect.collidepoint(pos):
+                if hasattr(element, 'focus'):
+                    element.focus = True
+                if hasattr(element, 'click'):
+                    element.click(button, Point(*pos))
 
     def onUnclick(self, button, pos):
         for element in self.elements:
